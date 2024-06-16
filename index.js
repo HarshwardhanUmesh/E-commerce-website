@@ -28,7 +28,7 @@ const upload = multer({ storage: storage });
 
 //Express connection
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000
 const corsOptions = {
   //To allow requests from client
   origin: [
