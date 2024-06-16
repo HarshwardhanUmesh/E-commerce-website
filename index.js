@@ -51,7 +51,7 @@ app.use(session({
   resave: false,
   store: MongoStore.create({ mongoUrl: 'mongodb+srv://admin-harshit:test123@cluster0.5v6tyuh.mongodb.net/best-store', ttl: 60 * 60 * 24 , autoRemove: 'native' }),
   saveUninitialized: false,
-  cookie: { httpOnly: true , maxAge: 1000 * 60 * 60 * 24, sameSite : 'none' ,secure : true }
+  cookie: { httpOnly: false , maxAge: 1000 * 60 * 60 * 24 }
 }))
 
 app.use(passport.initialize());
