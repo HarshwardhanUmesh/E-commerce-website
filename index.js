@@ -107,6 +107,10 @@ passport.use(User.createStrategy());
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+//Sample Route
+app.get("/",(req,res) => {
+  res.json({message : "HI"});
+})
 //Product Routes
 app.get("/product/:id", (req, res) => {
   Product.findOne({ id: req.params.id })
