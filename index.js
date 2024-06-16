@@ -31,7 +31,7 @@ const app = express();
 const PORT = process.env.PORT || 3000
 const corsOptions = {
   //To allow requests from client
-  origin: "*",
+  origin: ['http://localhost:5173'],
   "preflightContinue": false,
   "optionsSuccessStatus": 204,
   credentials: true,
