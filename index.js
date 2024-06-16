@@ -31,7 +31,7 @@ const app = express();
 const PORT = process.env.PORT || 3000
 const corsOptions = {
   //To allow requests from client
-  origin: ['http://localhost:5173'],
+  origin: ['http://localhost:3000'],
   "preflightContinue": false,
   "optionsSuccessStatus": 204,
   credentials: true,
@@ -296,7 +296,7 @@ app.post("/user/register/", upload.array(), async (req, res) => {
 })                                                              //Route to register new user
 
 app.post("/user/login/", upload.array(), (req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173');
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.setHeader('Access-Control-Expose-Headers', '*');
   console.log("Body", req.body);
   const user = new User({
