@@ -48,7 +48,7 @@ app.use(cors(corsOptions));
 app.use(session({
   secret: 'MXYAIVOY5O7FWZY577K5A54QXIZ5IV',
   resave: false,
-  store: MongoStore.create({ mongoUrl: 'mongodb://localhost:27017/best-store', ttl: 60 * 60 * 24 , autoRemove: 'native' }),
+  store: MongoStore.create({ mongoUrl: 'mongodb+srv://admin-harshit:test123@cluster0.5v6tyuh.mongodb.net/bestStore', ttl: 60 * 60 * 24 , autoRemove: 'native' }),
   saveUninitialized: false,
   cookie: { httpOnly: false , maxAge: 1000 * 60 * 60 * 24 }
 }))
