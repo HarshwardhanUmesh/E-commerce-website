@@ -296,7 +296,7 @@ app.post("/user/register/", upload.array(), async (req, res) => {
 })                                                              //Route to register new user
 
 app.post("/user/login/", upload.array(), (req, res) => {
-  res.set('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173');
   res.setHeader('Access-Control-Expose-Headers', '*');
   console.log("Body", req.body);
   const user = new User({
