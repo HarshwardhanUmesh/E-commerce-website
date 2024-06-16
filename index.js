@@ -31,9 +31,7 @@ const app = express();
 const PORT = process.env.PORT || 3000
 const corsOptions = {
   //To allow requests from client
-  origin: [
-    "http://localhost:5173",
-  ],
+  origin: "*",
   "preflightContinue": false,
   "optionsSuccessStatus": 204,
   credentials: true,
@@ -48,7 +46,7 @@ app.use(cors(corsOptions));
 app.use(session({
   secret: 'MXYAIVOY5O7FWZY577K5A54QXIZ5IV',
   resave: false,
-  store: MongoStore.create({ mongoUrl: 'mongodb+srv://admin-harshit:test123@cluster0.5v6tyuh.mongodb.net/bestStore', ttl: 60 * 60 * 24 , autoRemove: 'native' }),
+  store: MongoStore.create({ mongoUrl: 'mongodb+srv://admin-harshit:test123@cluster0.5v6tyuh.mongodb.net/best-store', ttl: 60 * 60 * 24 , autoRemove: 'native' }),
   saveUninitialized: false,
   cookie: { httpOnly: false , maxAge: 1000 * 60 * 60 * 24 }
 }))
@@ -63,7 +61,7 @@ app.listen(PORT, () => {
 
 //MongoDB connection
 mongoose
-  .connect("mongodb://localhost:27017/best-store")
+  .connect("mongodb+srv://admin-harshit:test123@cluster0.5v6tyuh.mongodb.net/best-store")
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.log(err));
 
