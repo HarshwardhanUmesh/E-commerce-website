@@ -29,14 +29,17 @@ const upload = multer({ storage: storage });
 //Express connection
 const app = express();
 const PORT = process.env.PORT || 3000
+const allowedHeaders = 'Origin, X-Requested-With, Content-Type, Accept, Authorization, Set-Cookie';
 const corsOptions = {
   //To allow requests from client
   origin: ['http://localhost:3000','http://localhost:5173'],
+  allowedHeaders: allowedHeaders,
   "preflightContinue": false,
   "optionsSuccessStatus": 204,
   credentials: true,
   exposedHeaders: ["set-cookie"],
 };
+
 
 app.use(express.static('public'))
 app.use(bodyParser.urlencoded({ extended: false }))
