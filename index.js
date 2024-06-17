@@ -370,6 +370,7 @@ app.post("/user/update/", upload.array(), (req, res) => {
           lastName : data.lastName,
           role : data.role[0],
           id : data._id,
+          sessionID : sessionID,
           ...(data.phoneNumber && { phoneNumber : data.phoneNumber }),
           ...(data.address && { address : data.address }),
         });
