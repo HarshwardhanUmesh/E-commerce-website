@@ -397,7 +397,7 @@ app.post("/user/updatePassword/",upload.array(), async (req, res) => {
     } else {
       req.user = {username : session.passport.user}
       if (req.user.username === req.body.username){
-        const user = await User.findById(req.body.id);
+        const user = await User.findById(req.body.username);
     user.changePassword(req.body.oldpassword, req.body.newpassword, function(err) {
       if (err) {
         res.status(400).send(err);
