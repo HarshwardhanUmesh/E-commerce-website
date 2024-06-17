@@ -312,7 +312,7 @@ app.post("/user/register/", upload.array(), async (req, res) => {
           username: req.user.username,
           role: req.user.role[0],
           id: req.user._id,
-          sessionID : req.body.sessionID,
+          sessionID:req.sessionID,,
           ...(req.user.phoneNumber && { phoneNumber: req.user.phoneNumber }),
           ...(req.user.address && { address: req.user.address }),
         });
