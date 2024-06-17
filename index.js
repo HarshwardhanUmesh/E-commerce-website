@@ -443,8 +443,12 @@ app.get("/cart", (req, res) => {
 })
 
 app.post("/cart/add",upload.array(), (req, res) => {
-  if (req.isAuthenticated() && req.user.role[0] === "user") {
-    const cartObject = {
+    req.sessionStore.get(sessionID, (err, session) => {
+    if (err || !session) {
+      res.status(401).send({ message: 'Invalid session' });
+    } else {
+      req.user.username = session.passport.user
+      const cartObject = {
       [req.body.id]: {
         quantity : req.body.quantity,
         ...(req.body.checked ? { checked : req.body.checked } : { checked : 1 })
@@ -459,9 +463,8 @@ app.post("/cart/add",upload.array(), (req, res) => {
         console.log(err)
         res.status(400);
       })
-  } else {
-    res.status(401).send("Not authorized");
-  }
+    }
+  });
 })
 app.delete("/cart/delete/:id", (req, res) => {
   if (req.isAuthenticated() && req.user.role[0] === "user") {
