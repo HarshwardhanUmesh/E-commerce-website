@@ -512,7 +512,11 @@ app.post("/cart/add",upload.array(), (req, res) => {
         ...(req.body.checked ? { checked : req.body.checked } : { checked : 1 })
       }
     }
-    User.findOneAndUpdate({ username: req.user.username }, { cart: {...req.user.cart, ...cartObject } }, { new: true })
+    User.findOneAndUpdate({ username: req.user.username },       [{
+        $set: {
+          cart: { $mergeObjects: ['$cart', cartObject] }
+        }
+      }], { new: true })
       .then((data) => {
         res.status(200);
         res.json({ cart: req.user.cart });
