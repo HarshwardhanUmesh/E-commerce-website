@@ -155,8 +155,12 @@ app.get("/products", async (req, res) => {
 })                                                             //Route to get all products
 
 app.post("/product/add/", upload.array(), (req, res) => {
-  if (req.isAuthenticated() && req.user.role[0] === "admin") {
-    console.log(req.body);
+  const sessionID = req.body.sessionID;
+  req.sessionStore.get(sessionID, (err, session) => {
+    if (err || !session) {
+      res.status(401).send({ message: 'Invalid session' });
+    } else {
+      console.log(req.body);
     var errors = {};
     const date = new Date();
     req.body.createdAt = date.toISOString();
@@ -200,15 +204,17 @@ app.post("/product/add/", upload.array(), (req, res) => {
       })
 
     }
-  } else {
-    res.status(401).send("Not authorized");
-  }
+    }
+  });
 });                                                            //Route to add new product
 
 app.patch("/product/edit/:id", upload.array(), (req, res) => {
-  if (req.isAuthenticated() && req.user.role[0] === "admin") {
-    console.log("Authenticated");
-
+   const sessionID = req.body.sessionID;
+  req.sessionStore.get(sessionID, (err, session) => {
+    if (err || !session) {
+      res.status(401).send({ message: 'Invalid session' });
+    } else {
+      console.log("Authenticated");
     console.log("Body", req.body);
     Product.findOneAndUpdate({ id: parseInt(req.params.id) }, req.body)
       .then((data) => {
@@ -220,14 +226,17 @@ app.patch("/product/edit/:id", upload.array(), (req, res) => {
         console.log(err)
         res.status(400);
       })
-  } else {
-    res.status(401).send("Not authorized");
-  }
+    }
+  });
 })                                                             //Route to edit one product
 
-app.delete("/product/delete/:id", (req, res) => {
-  if (req.isAuthenticated() && req.user.role[0] === "admin") {
-    Product.findOneAndDelete({ id: parseInt(req.params.id) })
+app.delete("/product/delete/:id",upload.array(), (req, res) => {
+  const sessionID = req.body.sessionID;
+  req.sessionStore.get(sessionID, (err, session) => {
+    if (err || !session) {
+      res.status(401).send({ message: 'Invalid session' });
+    } else {
+       Product.findOneAndDelete({ id: parseInt(req.params.id) })
       .then((data) => {
         console.log(data);
         res.status(200);
@@ -237,22 +246,32 @@ app.delete("/product/delete/:id", (req, res) => {
         console.log(err)
         res.status(400);
       })
-  } else {
-    res.status(401).send("Not authorized");
-  }
+    }
+  });
 })                                                             //Route to delete one product
 
 app.post("/image/add/", upload.single('image'), (req, res) => {
-  if (req.isAuthenticated() && req.user.role[0] === "admin") {
-    console.log(req.body);
+  const sessionID = req.body.sessionID;
+
+  // Fetch the session from the session store
+  req.sessionStore.get(sessionID, (err, session) => {
+    if (err || !session) {
+      res.status(401).send({ message: 'Invalid session' });
+    } else {
+       console.log(req.body);
     res.setHeader('Content-Type', 'application/json');
     return res.json({ filename: req.body.imageFilename })
-  } else { res.status(401).send("Not authorized") }       //Route to add image
+    }
+  });    //Route to add image
 })
 
 app.patch("/image/add/", upload.single('file'), (req, res) => {
-  if (req.isAuthenticated() && req.user.role[0] === "admin") {
-    console.log("ImgPatch request body", req.body);
+  const sessionID = req.body.sessionID;
+  req.sessionStore.get(sessionID, (err, session) => {
+    if (err || !session) {
+      res.status(401).send({ message: 'Invalid session' });
+    } else {
+      console.log("ImgPatch request body", req.body);
     fs.unlink('public/images/' + req.body.image, (err) => {
       if (err) {
         console.error(err);
@@ -264,7 +283,8 @@ app.patch("/image/add/", upload.single('file'), (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     console.log("ImgPatch response", req.body.imageFilename);
     return res.json({ filename: req.body.imageFilename })
-  } else { res.status(401).send("Not authorized") }
+    }
+  });
 })                                                              //Route to edit image
 
 //Auth Routes
@@ -328,9 +348,16 @@ app.post("/user/login/", upload.array(), (req, res) => {
 
 app.post("/user/update/", upload.array(), (req, res) => {
   console.log(req.body);
-  if (req.isAuthenticated() && req.body.id === req.user._id.toString()) {
-    // console
-    delete req.body.id
+  const sessionID = req.body.sessionID;
+
+  // Fetch the session from the session store
+  req.sessionStore.get(sessionID, (err, session) => {
+    if (err || !session) {
+      res.status(401).send({ message: 'Invalid session' });
+    } else {
+     req.user = {username : session.passport.user}
+      if (req.user.username === req.body.username){
+        delete req.body.id
     User.findOneAndUpdate({ username: req.body.username }, req.body,{
       new: true
     })
@@ -350,15 +377,24 @@ app.post("/user/update/", upload.array(), (req, res) => {
         console.log(err)
         res.status(400);
       })
-  } else {
-    console.log(req.user);
+    }else{
+        console.log(req.user);
     res.status(401).send("Not authorized");
-  }
+    }
+  });
 })
 
 app.post("/user/updatePassword/",upload.array(), async (req, res) => {
-  if (req.isAuthenticated() && req.user._id.toString() === req.body.id) {
-    const user = await User.findById(req.body.id);
+  const sessionID = req.body.sessionID;
+
+  // Fetch the session from the session store
+  req.sessionStore.get(sessionID, (err, session) => {
+    if (err || !session) {
+      res.status(401).send({ message: 'Invalid session' });
+    } else {
+      req.user = {username : session.passport.user}
+      if (req.user.username === req.body.username){
+        const user = await User.findById(req.body.id);
     user.changePassword(req.body.oldpassword, req.body.newpassword, function(err) {
       if (err) {
         res.status(400).send(err);
@@ -366,10 +402,12 @@ app.post("/user/updatePassword/",upload.array(), async (req, res) => {
         res.status(200).send("Password changed successfully");
       }
     });
-  } else {
-    console.log(req.user._id.toString(), req.body.id);
+      }else{
+        console.log(req.user._id.toString(), req.body.id);
     res.status(401).send("Not authorized");
-  }
+      }
+    }
+  });
   })
 app.get("/user/secret",upload.array(), (req, res) => {
 const sessionID = req.body.sessionID;
@@ -416,8 +454,14 @@ app.get("/users", async (req, res) => {
 })
 
 app.get("/userInfo/:id", async (req, res) => {
-  if (req.isAuthenticated() && req.user.role[0] === "admin") {
-    User.findOne({id :req.params.id},{firstName: 1, lastName: 1, username: 1, role: 1, id: 1, address: 1, phoneNumber: 1})
+  const sessionID = req.body.sessionID;
+
+  // Fetch the session from the session store
+  req.sessionStore.get(sessionID, (err, session) => {
+    if (err || !session) {
+      res.status(401).send({ message: 'Invalid session' });
+    } else {
+      User.findOne({id :req.params.id},{firstName: 1, lastName: 1, username: 1, role: 1, id: 1, address: 1, phoneNumber: 1})
       .then((data) => {
         res.status(200);
         res.json(data);
@@ -426,20 +470,28 @@ app.get("/userInfo/:id", async (req, res) => {
         console.log(err)
         res.status(400);
       })
-  } else {
-    res.status(401).send("Not authorized");
-  }
+    }
+  });
 })
 
 //User Routes
 app.get("/cart", (req, res) => {
-  console.log(req.headers);
-  if (req.isAuthenticated() && req.user.role[0] === "user") {
-    res.status(200);
-    res.json({ cart: req.user.cart });
-  } else {
-    res.status(401).send("Not authorized");
-  }
+  onst sessionID = req.body.sessionID;
+
+  // Fetch the session from the session store
+  req.sessionStore.get(sessionID, (err, session) => {
+    if (err || !session) {
+      res.status(401).send({ message: 'Invalid session' });
+    } else {
+       req.user = 
+       const user = User.findOne({username : session.passport.user}).then(
+         (data) => {
+           res.status(200);
+          res.json({ cart: data.cart });
+         } 
+       )
+    }
+  });
 })
 
 app.post("/cart/add",upload.array(), (req, res) => {
@@ -470,8 +522,15 @@ app.post("/cart/add",upload.array(), (req, res) => {
   });
 })
 app.delete("/cart/delete/:id", (req, res) => {
-  if (req.isAuthenticated() && req.user.role[0] === "user") {
-    User.findOneAndUpdate({ username: req.user.username }, {$unset : { ["cart." + req.params.id] : "1" } }, { new: true })
+  const sessionID = req.body.sessionID;
+
+  // Fetch the session from the session store
+  req.sessionStore.get(sessionID, (err, session) => {
+    if (err || !session) {
+      res.status(401).send({ message: 'Invalid session' });
+    } else {
+      req.user = {username : session.passport.user}
+       User.findOneAndUpdate({ username: req.user.username }, {$unset : { ["cart." + req.params.id] : "1" } }, { new: true })
       .then((data) => {
         res.status(200);
         res.json({ cart: data.cart });
@@ -480,9 +539,8 @@ app.delete("/cart/delete/:id", (req, res) => {
         console.log(err)
         res.status(400);
       })
-  } else {
-    res.status(401).send("Not authorized");
-  }
+    }
+  });
 })
 app.get("/cart/checkOut", (req, res) => {
   if (req.isAuthenticated() && req.user.role[0] === "user") {
