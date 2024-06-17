@@ -158,6 +158,7 @@ app.post("/product/add/", upload.array(), (req, res) => {
   const sessionID = req.body.sessionID;
   req.sessionStore.get(sessionID, (err, session) => {
     if (err || !session) {
+      console.log("error",err)
       res.status(401).send({ message: 'Invalid session' });
     } else {
       console.log(req.body);
