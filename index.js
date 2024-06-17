@@ -457,7 +457,7 @@ app.get("/users", async (req, res) => {
 })
 
 app.get("/userInfo/:id", async (req, res) => {
-  const sessionID = req.body.sessionID;
+  const sessionID = req.query.sessionID;
 
   // Fetch the session from the session store
   req.sessionStore.get(sessionID, (err, session) => {
