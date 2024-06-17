@@ -309,6 +309,7 @@ app.post("/user/login/", upload.array(), (req, res) => {
   req.login(user, function (err) {
     if (err) { console.log(err); }
     passport.authenticate("local")(req, res, () => {
+      console.log(res.headers)
       res.status(200).json({
         firstName: req.user.firstName,
         lastName: req.user.lastName,
