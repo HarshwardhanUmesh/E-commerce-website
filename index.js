@@ -528,7 +528,7 @@ app.post("/cart/add",upload.array(), (req, res) => {
     }
   });
 })
-app.delete("/cart/delete/:id", (req, res) => {
+app.delete("/cart/delete/:id", upload.array(), (req, res) => {
   const sessionID = req.body.sessionID;
 
   // Fetch the session from the session store
