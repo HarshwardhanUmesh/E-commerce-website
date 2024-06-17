@@ -381,14 +381,15 @@ app.post("/user/update/", upload.array(), (req, res) => {
         console.log(req.user);
     res.status(401).send("Not authorized");
     }
-  });
+    }
+})
 })
 
 app.post("/user/updatePassword/",upload.array(), async (req, res) => {
   const sessionID = req.body.sessionID;
 
   // Fetch the session from the session store
-  req.sessionStore.get(sessionID, (err, session) => {
+  await req.sessionStore.get(sessionID, async (err, session) => {
     if (err || !session) {
       res.status(401).send({ message: 'Invalid session' });
     } else {
@@ -476,7 +477,7 @@ app.get("/userInfo/:id", async (req, res) => {
 
 //User Routes
 app.get("/cart", (req, res) => {
-  onst sessionID = req.body.sessionID;
+  const sessionID = req.body.sessionID;
 
   // Fetch the session from the session store
   req.sessionStore.get(sessionID, (err, session) => {
@@ -571,6 +572,7 @@ app.get("/cart/checkOut", (req, res) => {
         res.status(400);
       })
     }
+})
 })
 
 app.get("/orderHistory", (req, res) => {
