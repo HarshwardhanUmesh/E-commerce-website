@@ -446,6 +446,7 @@ app.post("/cart/add",upload.array(), (req, res) => {
   const sessionID = req.body.sessionID
     req.sessionStore.get(sessionID, (err, session) => {
     if (err || !session) {
+      console.log(err)
       res.status(401).send({ message: 'Invalid session' });
     } else {
       req.user.username = session.passport.user
