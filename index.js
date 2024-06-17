@@ -443,6 +443,7 @@ app.get("/cart", (req, res) => {
 })
 
 app.post("/cart/add",upload.array(), (req, res) => {
+  const sessionID = req.body.sessionID
     req.sessionStore.get(sessionID, (err, session) => {
     if (err || !session) {
       res.status(401).send({ message: 'Invalid session' });
