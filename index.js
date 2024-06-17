@@ -376,6 +376,7 @@ const sessionID = req.body.sessionID;
     if (err || !session) {
       res.status(401).send({ message: 'Invalid session' });
     } else {
+      console.log(session.user);
       res.send({ message: 'Data accessed', user: session.user });
     }
   });
