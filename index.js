@@ -584,7 +584,7 @@ app.get("/cart/checkOut", async (req, res) => {
 })
 
 app.get("/orderHistory", (req, res) => {
-  const sessionID = req.body.sessionID;
+  const sessionID = req.query.sessionID;
 
   // Fetch the session from the session store
   req.sessionStore.get(sessionID, (err, session) => {
@@ -594,7 +594,7 @@ app.get("/orderHistory", (req, res) => {
         const user = User.findOne({username : session.passport.user}).then(
          (data) => {
            res.status(200);
-          res.json({ cart: data.cart });
+          res.json({ orderHistory: data.orderHistory });
          } 
        )
     }
