@@ -370,7 +370,7 @@ app.post("/user/updatePassword/",upload.array(), async (req, res) => {
     res.status(401).send("Not authorized");
   }
   })
-app.get("/user/secret", (req, res) => {
+app.get("/user/secret",upload.array(), (req, res) => {
 const sessionID = req.body.sessionID;
   req.sessionStore.get(sessionID, (err, session) => {
     if (err || !session) {
