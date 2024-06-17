@@ -479,7 +479,8 @@ app.get("/userInfo/:id", async (req, res) => {
 
 //User Routes
 app.get("/cart", (req, res) => {
-  const sessionID = req.body.sessionID;
+  const sessionID = req.query.sessionID;
+  (req.query.sessionID && console.log("query Found"))
 
   // Fetch the session from the session store
   req.sessionStore.get(sessionID, (err, session) => {
