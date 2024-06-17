@@ -440,7 +440,6 @@ app.get("/users", async (req, res) => {
   const page = parseInt(req.query._page);
   const offset = (page - 1) * req.query._limit;
   const sessionID = req.query.sessionID;
-  const sessionID = req.body.sessionID;
 
   // Fetch the session from the session store
   req.sessionStore.get(sessionID, (err, session) => {
