@@ -371,15 +371,14 @@ app.post("/user/updatePassword/",upload.array(), async (req, res) => {
   }
   })
 app.get("/user/secret", (req, res) => {
-  console.log("secret accessed");
-  if (req.isAuthenticated() && req.user.role[0] === "admin") {
-    // console.log("aces",req.user);
-    res.status(200);
-    res.json({ secret: "Found it!" });
-  } else {
-    res.status(400);
-    res.json({ secret: "Not found" });
-  }
+const sessionID = req.body.sessionID;
+  req.sessionStore.get(sessionID, (err, session) => {
+    if (err || !session) {
+      res.status(401).send({ message: 'Invalid session' });
+    } else {
+      res.send({ message: 'Data accessed', user: session.user });
+    }
+  });
 })
 
 // Admin Routes
