@@ -549,15 +549,16 @@ app.delete("/cart/delete/:id", (req, res) => {
     }
   });
 })
-app.get("/cart/checkOut", (req, res) => {
+app.get("/cart/checkOut", async (req, res) => {
   const sessionID = req.query.sessionID;
 
   // Fetch the session from the session store
-  req.sessionStore.get(sessionID, (err, session) => {
+  await req.sessionStore.get(sessionID, async (err, session) => {
     if (err || !session) {
+      console.log("error!!",err)
       res.status(401).send({ message: 'Invalid session' });
     } else {
-      req.user = {username : session.passport.user}
+      req.user = await User.findOne({username : session.passport.user})
        const Order = {
       time : Date.now(),
       items : []
