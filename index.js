@@ -32,7 +32,7 @@ const PORT = process.env.PORT || 3000
 const allowedHeaders = 'Origin, X-Requested-With, Content-Type, Accept, Authorization, Set-Cookie, Cookie';
 const corsOptions = {
   //To allow requests from client
-  origin: ['http://localhost:3000','http://localhost:5173'],
+  origin: ['https://best-store-reactjs-04c0d4138808.herokuapp.com'],
   allowedHeaders: allowedHeaders,
   "preflightContinue": false,
   "optionsSuccessStatus": 204,
