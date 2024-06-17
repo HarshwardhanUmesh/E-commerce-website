@@ -230,8 +230,8 @@ app.patch("/product/edit/:id", upload.array(), (req, res) => {
   });
 })                                                             //Route to edit one product
 
-app.delete("/product/delete/:id",upload.array(), (req, res) => {
-  const sessionID = req.body.sessionID;
+app.delete("/product/delete/:id", (req, res) => {
+  const sessionID = req.query.sessionID;
   req.sessionStore.get(sessionID, (err, session) => {
     if (err || !session) {
       res.status(401).send({ message: 'Invalid session' });
