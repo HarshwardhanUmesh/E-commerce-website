@@ -429,6 +429,7 @@ app.get("/userInfo/:id", async (req, res) => {
 
 //User Routes
 app.get("/cart", (req, res) => {
+  console.log(req.headers);
   if (req.isAuthenticated() && req.user.role[0] === "user") {
     res.status(200);
     res.json({ cart: req.user.cart });
