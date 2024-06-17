@@ -406,8 +406,8 @@ app.post("/user/updatePassword/",upload.array(), async (req, res) => {
       }
     });
       }else{
-        console.log(req.user._id.toString(), req.body.id);
-    res.status(401).send("Not authorized");
+        // console.log(req.user._id.toString(), req.body.id);
+        res.status(401).send("Not authorized");
       }
     }
   });
