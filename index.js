@@ -439,8 +439,15 @@ app.get("/users", async (req, res) => {
   const limit = parseInt(req.query._limit);
   const page = parseInt(req.query._page);
   const offset = (page - 1) * req.query._limit;
-  if (req.isAuthenticated() && req.user.role[0] === "admin") {
-    User.find({},{firstName: 1, lastName: 1, username: 1, role: 1, id: 1}).sort({id : 1}).skip(offset).limit(limit)
+  const sessionID = req.query.sessionID;
+  const sessionID = req.body.sessionID;
+
+  // Fetch the session from the session store
+  req.sessionStore.get(sessionID, (err, session) => {
+    if (err || !session) {
+      res.status(401).send({ message: 'Invalid session' });
+    } else {
+      User.find({},{firstName: 1, lastName: 1, username: 1, role: 1, id: 1}).sort({id : 1}).skip(offset).limit(limit)
       .then((data) => {
         // res.setHeader('X-Total-Count', data.length);
         // console.log(data.length);
@@ -451,9 +458,8 @@ app.get("/users", async (req, res) => {
         console.log(err)
         res.status(400);
       })
-  } else {
-    res.status(401).send("Not authorized");
-  }
+    }
+  });
 })
 
 app.get("/userInfo/:id", async (req, res) => {
