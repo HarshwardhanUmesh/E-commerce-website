@@ -483,7 +483,6 @@ app.get("/cart", (req, res) => {
     if (err || !session) {
       res.status(401).send({ message: 'Invalid session' });
     } else {
-       req.user = 
        const user = User.findOne({username : session.passport.user}).then(
          (data) => {
            res.status(200);
@@ -543,8 +542,15 @@ app.delete("/cart/delete/:id", (req, res) => {
   });
 })
 app.get("/cart/checkOut", (req, res) => {
-  if (req.isAuthenticated() && req.user.role[0] === "user") {
-    const Order = {
+  const sessionID = req.body.sessionID;
+
+  // Fetch the session from the session store
+  req.sessionStore.get(sessionID, (err, session) => {
+    if (err || !session) {
+      res.status(401).send({ message: 'Invalid session' });
+    } else {
+      req.user = {username : session.passport.user}
+       const Order = {
       time : Date.now(),
       items : []
     }
@@ -564,18 +570,25 @@ app.get("/cart/checkOut", (req, res) => {
         console.log(err)
         res.status(400);
       })
-  } else {
-    res.status(401).send("Not authorized");
-  }
+    }
 })
 
 app.get("/orderHistory", (req, res) => {
-  if (req.isAuthenticated() && req.user.role[0] === "user") {
-    res.status(200);
-    res.json({ orderHistory: req.user.orderHistory });
-  } else {
-    res.status(401).send("Not authorized");
-  }
+  const sessionID = req.body.sessionID;
+
+  // Fetch the session from the session store
+  req.sessionStore.get(sessionID, (err, session) => {
+    if (err || !session) {
+      res.status(401).send({ message: 'Invalid session' });
+    } else {
+        const user = User.findOne({username : session.passport.user}).then(
+         (data) => {
+           res.status(200);
+          res.json({ cart: data.cart });
+         } 
+       )
+    }
+  });
 })
 /* Dummy data */
 /*
