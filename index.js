@@ -182,6 +182,7 @@ app.post("/product/add/", upload.array(), (req, res) => {
       errors.description = ("Description must be at least 3 characters long");
     }
     if (Object.keys(errors).length !== 0) {
+      console.log(errors)
       res.status(400).json(errors);
       return;
     } else {
