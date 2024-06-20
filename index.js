@@ -49,7 +49,7 @@ app.use(cors(corsOptions));
 app.use(session({
   secret: 'MXYAIVOY5O7FWZY577K5A54QXIZ5IV',
   resave: false,
-  store: MongoStore.create({ mongoUrl: 'mongodb+srv://admin-harshit:test123@cluster0.5v6tyuh.mongodb.net/best-store', ttl: 60 * 60 * 24 , autoRemove: 'native' }),
+  store: MongoStore.create({ mongoUrl: 'mongodb+srv://userbot:Subodh502@cluster0.r0utg.mongodb.net/best-store', ttl: 60 * 60 * 24 , autoRemove: 'native' }),
   saveUninitialized: false,
   cookie: { httpOnly: true,
             secure: false,
@@ -66,7 +66,7 @@ app.listen(PORT, () => {
 
 //MongoDB connection
 mongoose
-  .connect("mongodb+srv://admin-harshit:test123@cluster0.5v6tyuh.mongodb.net/best-store")
+  .connect("mongodb+srv://userbot:Subodh502@cluster0.r0utg.mongodb.net/best-store")
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.log(err));
 
